@@ -1,5 +1,3 @@
-import math
-
 # Nemeh
 def add(x, y):
     return x + y
@@ -18,26 +16,28 @@ def divide(x, y):
         return "Cannot divide by zero"
     return x / y
 
-#logarithm suuri 10
-def logarithm(x):
-    if x <= 0:
-        return "Invalid input"
-    return math.log10(x)
+# Calculate the integral of a function
+def calculate_integral(lower_limit, upper_limit, function):
+    step = 0.001  # Step size for numerical integration
+    n_steps = int((upper_limit - lower_limit) / step)
+    integral = 0.0
+    x = lower_limit
+    for _ in range(n_steps):
+        integral += step * function(x)
+        x += step
+    return integral
 
-#log operations
-def log_operation(operation, x, y=None):
+# Log operations
+def log_operation(operation, *args):
     with open("calculator_log.txt", "a") as file:
-        if y is None:
-            file.write(f"{operation}({x}) = {eval(operation + '(x)')}\n")
-        else:
-            file.write(f"{x} {operation} {y} = {eval(operation + '(x, y)')}\n")
+        file.write(f"{operation}({', '.join(map(str, args))})\n")
 
 def calculator():
     print("1. Nemeh")
     print("2. Hasah")
     print("3. Urjih")
     print("4. Huvaah")
-    print("5. Logarithm (suuri 10)")
+    print("5. Integral")
     print("0. Garah")
 
     while True:
@@ -56,26 +56,25 @@ def calculator():
                 continue
 
             if choice == '1':
-                log_operation('add', num1, num2)
                 print("Result:", add(num1, num2))
             elif choice == '2':
-                log_operation('subtract', num1, num2)
                 print("Result:", subtract(num1, num2))
             elif choice == '3':
-                log_operation('multiply', num1, num2)
                 print("Result:", multiply(num1, num2))
             elif choice == '4':
-                log_operation('divide', num1, num2)
                 print("Result:", divide(num1, num2))
-        elif choice == '5':  # Logarithm operation
+        elif choice == '5':  # Integral 
             try:
-                num = float(input("Toogoo oruulna uu: "))
+                lower_limit = float(input("Dood too: "))
+                upper_limit = float(input("Deed too: "))
+                expression = input("Function-iig oruulna uu: ")
+                function = lambda x: eval(expression)
             except ValueError:
-                print("Buruu too oruulsan baina dahij oroldono uu.")
+                print("Buruu utga oruulsan baina dahij oroldono uu.")
                 continue
 
-            log_operation('logarithm', num)
-            print("Result:", logarithm(num))
+            print("Result:", calculate_integral(lower_limit, upper_limit, function))
+            log_operation('calculate_integral', lower_limit, upper_limit, expression)
         else:
             print("Baihgui songolt baina dahij songono uu.")
 
